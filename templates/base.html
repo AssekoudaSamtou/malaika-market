@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+		<link href="{% static 'css/style.css' %}" rel="stylesheet">
+		<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
+
+		<script src="{% static 'js/jquery.js' %}"></script>
+		<script src="{% static 'js/bootstrap.js' %}"></script>
+		{% block style %}{% endblock %}
+		<title>Malaika &mdash; {% block title %}{% endblock %} </title>
+	</head>
+
+	<body>
+	<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+		<!-- DEBUT HEADER -->
+			{% include 'header.html' %}
+		<!-- FIN HEADER -->
+
+		<div class="container-fluid">
+			{% block content %}{% endblock %}
+		</div>
+
+		<!-- DEBUT FOOTER -->
+			{% include 'footer.html' %}
+		<!-- DEBUT SCRIPTS -->
+			{% block scripts %}{% endblock %}
+
+			<script type="text/javascript" src="{% static 'js/all.js' %}"></script>
+			
+	</body>
+</html>

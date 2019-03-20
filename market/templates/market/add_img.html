@@ -1,0 +1,16 @@
+{%extends "base.html"%}
+{% load static %}
+
+{% block title %}New Image{% endblock %}
+
+
+{% block content %}
+	<h1>Enregistrer IMG</h1>
+	{% if sauvegarde %}Ce contact a bien été enregistré !{% endif %}
+
+	<form action="{% url 'new_img' %}" enctype="multipart/form-data" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Submit" />
+	</form>
+{% endblock %}

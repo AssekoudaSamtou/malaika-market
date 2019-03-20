@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load my_filters %}
+
+{% block title %}Home{% endblock %}
+{% block style %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+	<div class="container-fluid">
+		<h1 class="text-center">VOTRE PANIER</h1>
+		<div class="row">
+			<div class="col-lg-2 col-sm-2">PRODUIT</div>
+			<div class="col-lg-2 col-sm-2">NOM DU PRODUIT</div>
+			<div class="col-lg-2 col-sm-2">PRIX</div>
+			<div class="col-lg-2 col-sm-2">QUANTITE</div>
+			<div class="col-lg-2 col-sm-2">SUPPRIMER</div>
+			<div class="col-lg-2 col-sm-2">TOTAL</div>
+		</div>
+
+		{% for commande in commandes %}
+		<div class="row commande" id="commande{{ commande.id }}">
+			<div class="col-lg-2 col-sm-2">
+				<input type="checkbox" name="produit" class="select-produit"
+				{% if commande.pret_a_payer %}checked='checked'{% endif %}>
+				<img src="{{ commande.produit.logo.photo.url }}" title="{{ commande.produit.libelle }}" class="small">
+			</div>
+			<div class="col-lg-2 col-sm-2">{{ commande.produit.libelle }}</div>
+			<div class="col-lg-2 col-sm-2">{{ commande.produit.prix }}<em>&nbsp;Fcfa</em></div>
+			<div class="col-lg-2 col-sm-2">
+				<button class="btn btn-default ctrl-quantite" value="{{ commande.produit.id }}">
+					<span>-</span>
+				</button>
+				<button class="btn btn-default quantite" value="{{ commande.id }}">
+					<span>{{ commande.quantite }}</span>
+				</button>
+				<button class="btn btn-default ctrl-quantite" value="{{ commande.produit.id }}">
+					<span>+</span>
+				</button>
+			</div>
+			<div class="col-lg-2 col-sm-2">
+				<button class="btn btn-default supprimer" value="{{ commande.id }}">
+					<span class="fa fa-trash-o"></span>
+				</button>
+			</div>
+			<div class="col-lg-2 col-sm-2 total">
+				{{ commande.total|default:commande.produit.prix }}
+				<em>&nbsp;Fcfa</em>
+			</div>
+		</div>
+		{% empty %}
+		<div class="text-center">
+			<h1>Oups !!! Votre panier est vide.</h1>
+			<span>Ajouter des <a href="{% url 'catalogue' %}">produits</a></span>
+		</div>
+		{% endfor %}
+
+		<div class="row">
+			<div class="offset-9 col-sm-2">
+				<div class="row">
+					<span class="col-lg-8">SOUS-TOTAL : </span>
+					<span id="sous-total" class="col-lg-4">{{ commandes|sous_total }} </span>
+				</div>
+				<div class="row">
+					<span class="col-lg-8 text-rigth">TAXE : </span>
+					<span id="taxe-total" class="col-lg-4">{{ commandes|taxe_total }}</span>
+				</div>
+				<div class="row">
+					<span class="col-lg-8">TOTAL : </span>
+					<span id="total-total" class="col-lg-4">{{ commandes|totaux }}</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-6 offset-6">
+				<div class="row">
+					<div class="col-lg-5 offset-2">
+						<button>PAYER MAINTNANT</button>
+					</div>
+					<div class="col-lg-5">
+						<button>PAYER A LA LIVRAISON</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+	function set_qte(ctrl_tag, qte_tag, total_tag, id){
+		window.new_qte = parseInt($(qte_tag).text());
+		var flag = false;
+
+		if ($(ctrl_tag).text() === "+") {
+			window.new_qte++;
+			flag = true;
+		}else if ($(ctrl_tag).text() === "-"){
+			if (window.new_qte > 1) {
+				window.new_qte--;
+				flag = true;
+			}else{
+				flag = false;
+			}
+		}
+
+		$(qte_tag).text(window.new_qte); //Affichage de la window.new_qte
+		
+		if (flag) {
+			$.ajax({
+				url : "/price/" + id + "/" + $(ctrl_tag).text() + "",
+				type : 'GET',
+				dataType : 'text',
+				async : false,
+				success : function(data, statut){
+					console.log(data);
+					total = window.new_qte * parseInt(data);
+					$(total_tag).text(total);
+				},
+				error : function(resultat, statut, erreur){
+					console.log(erreur);
+					alert("erreur AJAX");
+				},
+			});
+		}
+	}
+
+	function init(total_tag, id) {
+		window.current = $(total_tag);
+		$.ajax({
+			url : "/total/" + id + "",
+			type : 'GET',
+			dataType : 'text',
+			async : false,
+			success : function(data, statut){
+				// console.log(data);
+				window.current.text(data);
+			},
+			error : function(resultat, statut, erreur){
+				console.log(erreur);
+			},
+		});
+	}
+
+	function set_totaux() {
+
+		$.ajax({
+			url : "totaux",
+			type : 'GET',
+			dataType : 'json',
+			async : false,
+			success : function(data, statut){
+				console.log(data);
+				$("#sous-total").text(data.sous_total);
+				$("#taxe-total").text(data.taxe_total);
+				$("#total-total").text(data.totaux);
+			},
+			error : function(resultat, statut, erreur){
+				console.log(erreur);
+			},
+		});
+	}
+
+	function set_cmd_state(id, attr, state) {
+
+		$.ajax({
+			url : "set_cmd_state",
+			type : 'GET',
+			data : "pk=" + id + "&attribute=" + attr + "&state=" + state,
+			dataType : 'text',
+			async : false,
+			success : function(data, statut){
+				console.log(data);
+			},
+			error : function(resultat, statut, erreur){
+				console.log(erreur);
+			},
+		});
+	}
+
+
+	$(".quantite").each(function () {
+		init(this.parentElement.parentElement.children[5], this.value);
+	});
+
+	$(".ctrl-quantite").on("click", function () {
+		set_qte(
+			this.firstElementChild,
+			this.parentElement.children[1].firstElementChild,
+			this.parentElement.parentElement.children[5],
+			this.value
+		);
+
+		set_totaux();
+	});
+
+	$(".supprimer").on("click", function () {
+		window.supp_val = this.value;
+		$.ajax({
+			async : false,
+			url : "/delete/" + this.value + "",
+			type : 'GET',
+			dataType : 'text',
+			success : function(data, statut){
+				$("#commande"+window.supp_val).css("display", "none");
+				console.log(window.supp_val);
+			},
+			error : function(resultat, statut, erreur){
+				console.log(erreur);
+			},
+		});
+
+		set_totaux();
+	});
+
+	$(".select-produit").on("click", function () {
+		// console.log("erreur");
+		produit = this.parentElement.parentElement;
+		if (this.checked == true){
+			
+			$(produit).css("background", "#d9edf7").css("color", "#31708f");
+			
+			set_cmd_state(produit.id, "pret_a_payer", 1);
+			set_totaux();
+		
+		}else{
+
+			$(produit).css("background", "#fff").css("color", "black");
+
+			set_cmd_state(produit.id, "pret_a_payer", 0);
+			set_totaux();
+		}
+	});
+});
+</script>
+{% endblock %}

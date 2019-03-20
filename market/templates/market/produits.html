@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load my_filters %}
+
+{% block title %}Home{% endblock %}
+{% block style %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/produits.css' %}">
+	<style type="text/css">
+		bodynn{height: 100%;background: url({% static 'image/cart01.jpg' %}) no-repeat center center fixed; 
+			-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;/*overflow: hidden;*/}
+	</style>
+{% endblock %}
+
+{% block content %}
+<div id="ajax-container">
+	<div class="container">
+		<div class="row" id="content">
+			{% for produit in produits %}
+				<div class="col-xs-12 col-sm-12 col-lg-3 col-md-12 img-produit">
+					<div class="img-container hovereffect">
+						<img src="{{ produit.logo.photo.url }}" class="img-thumbnail">
+						<div class="overlay">
+							<h2>{{ produit.libelle }}</h2>
+							<a class="info">
+								<input type="hidden" value="Modal{{produit.id}}">
+								voir
+							</a><br>
+
+							<div>
+								{% if in_cart|item:produit %}
+								<div class="check">
+									<i class="fa fa-check" aria-hidden="true"></i>
+								</div>
+								{% else %}
+								<button class="btn btn-outline-success btn-ajout" value="{{ produit.id }}">
+									<i class=" fa fa-cart-plus" aria-hidden="true"></i>Ajouter
+								</button>
+								{% endif %}
+							</div>
+								
+							<div class="prix-article">{{ produit.prix }} Fcfa</div>
+							<!-- fa-check -->
+						</div>
+					</div>
+				</div>
+			{% empty %}
+			<h3 class="text-center">The Store Is Empty</h3>
+			{% endfor %}
+		</div>
+	</div>
+
+	<div id="detail" class="container-fluid">
+		{% for produit in produits %}
+		<div class="modal-fade text-center" id="Modal{{produit.id}}" role="dialog">
+			<button type="button" class="close" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			
+			<div class="row">
+				<div class="col-lg-4">
+					{% include 'market/carousel.html' %}
+				</div>
+				<div class="col-lg-4">
+					<div id="marque-produit">PRODUIT : {{ produit.libelle }}</div>
+						<div id="prix-produit">PRIX : {{ produit.prix }} Fcfa</div>
+						<div>
+							<legend>A propos du produit</legend>
+							{% lorem 1 p %}
+						</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="row">
+						<div class="col-lg-4">
+							<button class="btn btn-primary contuniue-shopping" role="button">
+								continuer le shopping
+							</button>
+						</div>
+						<div class="col-lg-4 col-lg-offset-4">
+							{% if in_cart|item:produit %}
+								<div class="check">
+									<i class="fa fa-check" aria-hidden="true"></i>
+								</div>
+								{% else %}
+								<button class="btn btn-outline-success btn-ajout" value="{{ produit.id }}" title="panier">
+									<i class=" fa fa-cart-plus" aria-hidden="true"></i>Ajouter
+								</button>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function () {
+		$(".btn-ajout").on("click", function(){
+			window.current_tag = $(this.parentElement);
+			$.ajax({
+				url : "produit/" + this.value + "/add",
+				type : 'GET',
+				dataType : 'text',
+				success : function(rep, statut){
+					window.current_tag.html('<div class="check"><i class=" fa fa-check" aria-hidden="true"></i></div>');
+					console.log("Votre produit a ete ajout a votre panier avec succes!!!");
+					$("#message-ajout").show(2000);
+					$("#message-ajout").slideUp(3000);
+
+				},
+				error : function(resultat, statut, erreur){
+					console.log(erreur);
+					alert("erreur AJAX");
+				},
+			});
+		});
+
+		$(".info").on("click", function () {
+			console.log("id");
+			id = "#" + this.firstElementChild.value;
+			console.log(id);
+			$(".modal-fade").slideUp();
+			$("#detail").css("display", "block");
+			$(id).show(1000);
+			$.get('details?id=' + id.charAt(6), function(data){
+				vara=data;
+				json_indice = 1;
+				console.log(data);
+				$(".ajax-img"+id.charAt(6)).each(function () {
+					$(this).html("<img src='" + vara[json_indice] +"' class='img-thumbnail'>");
+					json_indice++;
+				});
+			});
+		});
+
+		$(".contuniue-shopping").on("click", function () {
+			$(".modal-fade").slideUp();
+			$("#detail").css("display", "none");
+		});
+
+		$("#mysearch").keyup(function () {
+			// console.log(this.value);
+			$.get("produits?name=" + this.value, function (data) {
+				$('#ajax-container').html(data);
+			});
+		})
+	});
+</script>
+{% endblock %}

@@ -1,0 +1,46 @@
+img {
+	width: inherit;
+
+}
+body{
+	padding-top: 70px;
+	/*font-family: 'Roboto Slab';
+	font-weight: bold;*/
+	/*font-family: "ZCOOL QingKe HuangYou";*/
+}
+.inline-form input {
+	display: inline-block;
+	width: 100px;
+}
+#message-ajout{
+	display: none;
+}
+
+footer{
+	margin-top: 100px;
+	min-height: 100px;
+	color: white;
+	text-align: center;
+}
+
+footer, header .navbar{
+	background: black !important;
+}
+
+#btn-news{
+	color: #7451eb;
+	border-color: #7451eb;
+}
+
+#btn-news:hover{
+	background: #fff;
+	color: #7451eb;
+}
+
+.footer-left a:hover{
+	text-decoration: none;
+	background: #523f6d;
+}
+.footer-left a{
+	text-align: left;
+}

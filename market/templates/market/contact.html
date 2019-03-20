@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nous contacter{% endblock %}
+{% block style %}
+	<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/acceuil.css' %}"> -->
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<h3>Nous contacter</h3>
+		</div>
+		<div class="col-lg-12">
+			<a href="{% url 'acceuil' %} ">Acceuil</a>
+		</div>
+	</div>
+</div>
+{% endblock %}

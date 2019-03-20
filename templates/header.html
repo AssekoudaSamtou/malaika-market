@@ -1,0 +1,107 @@
+{% url 'acceuil'   as acceuil_url %}
+{% url 'catalogue' as catalogue_url %}
+{% url 'about'     as about_url %}
+{% url 'contact'   as contact_url %}
+{% url 'login'     as login_url %}
+{% url 'logout'    as logout_url %}
+
+<header class="page-header"><!-- container-fluid -->
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+		<a class="navbar-brand" href="{% url 'acceuil' %}">Malaika Market</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<!-- <li class="nav-item {% if request.path == acceuil_url %}active{% endif %}">
+					<a class="nav-link" href="{% url 'acceuil' %}">
+						Acceuil <span class="sr-only">(current)</span>
+					</a>
+				</li> -->
+				<li class="nav-item {% if request.path == catalogue_url %}active{% endif %}">
+					<a class="nav-link" href="{% url 'catalogue' %}">Catalogue</a>
+				</li>
+				<li class="nav-item {% if request.path == about_url %}active{% endif %}">
+					<a class="nav-link" href="{% url 'about' %}">A propos</a>
+				</li>
+				<li class="nav-item {% if request.path == contact_url %}active{% endif %}">
+					<a class="nav-link" href="{% url 'contact' %}">Contact</a>
+				</li>
+				{% if request.user.is_authenticated %}
+				<li class="nav-item {% if request.path == logout_url %}active{% endif %}">
+					<a class="nav-link" href="{% url 'logout' %}">Deconnection</a>
+				</li>
+				{% else %}
+				<li class="nav-item {% if request.path == login_url %}active{% endif %}">
+					<a class="nav-link" href="{% url 'login' %}">Connection</a>
+				</li>
+				{% endif %}
+
+				<li class="nav-item">
+
+					<a class="nav-link" href="{% url 'cart' %}">
+						<button class="btn btn-warning">
+							<i class=" fa fa-shopping-cart" aria-hidden="true"></i> Mon Panier
+						</button>
+					</a>
+				</li>
+
+				<!-- <li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Dropdown
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="#">Action</a>
+						<a class="dropdown-item" href="#">Another action</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="#">Something else here</a>
+					</div>
+				</li> -->
+			</ul>
+			<form class="form-inline my-2 my-lg-0">
+				<input id="mysearch" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		</div>
+		<div id="message-ajout" class="success">
+			Votre produit a ete ajout a votre panier avec succes!!!
+		</div>
+	</nav>
+</header>
+
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Product filter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		// $("#mysearch").keypress(function () {
+		// 	console.log("focusin");
+		// 	// alert("Hello");
+		// 	$("#exampleModalLong").modal({focus : false});
+		// })
+
+		// $("#mysearch").focusout(function () {
+		// 	console.log("focusout");
+		// 	$("#exampleModalLong").modal({show : false});
+		// })
+	});
+</script>
