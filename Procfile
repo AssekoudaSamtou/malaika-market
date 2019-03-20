@@ -1,1 +1,1 @@
-web: gunicorn malaika.wsgi --logfile -
+web: gunicorn malaika.wsgi
