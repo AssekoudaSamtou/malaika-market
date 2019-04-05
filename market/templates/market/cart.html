@@ -57,18 +57,18 @@
 		{% endfor %}
 
 		<div class="row">
-			<div class="offset-9 col-sm-2">
-				<div class="row">
-					<span class="col-lg-8">SOUS-TOTAL : </span>
-					<span id="sous-total" class="col-lg-4">{{ commandes|sous_total }} </span>
+			<div class="offset-9 col-sm-3">
+				<div class="row compta">
+					<span class="col-lg-6">SOUS-TOTAL : </span>
+					<span id="sous-total" class="col-lg-6">{{ commandes|sous_total }} </span>
 				</div>
-				<div class="row">
-					<span class="col-lg-8 text-rigth">TAXE : </span>
-					<span id="taxe-total" class="col-lg-4">{{ commandes|taxe_total }}</span>
+				<div class="row compta" id="taxe">
+					<span class="col-lg-6 text-rigth">TAXE : </span>
+					<span id="taxe-total" class="col-lg-6">{{ commandes|taxe_total }}</span>
 				</div>
-				<div class="row">
-					<span class="col-lg-8">TOTAL : </span>
-					<span id="total-total" class="col-lg-4">{{ commandes|totaux }}</span>
+				<div class="row compta">
+					<span class="col-lg-6">TOTAL : </span>
+					<span id="total-total" class="col-lg-6">{{ commandes|totaux }}</span>
 				</div>
 			</div>
 		</div>

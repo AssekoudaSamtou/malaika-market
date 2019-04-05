@@ -9,6 +9,7 @@ from .models import Image, Produit, Client, Commande
 from .forms import NewImageForm, LoginForm, RegisterForm
 
 from market.templatetags import my_filters
+import time
 # return HttpResponseRedirect('/success/url/')
 
 def home(request):
@@ -17,6 +18,8 @@ def home(request):
 	return render(request, "market/acceuil.html")
 
 def products(request):
+	# time.sleep(3)
+	# input("En pause")
 	if request.method == "GET":
 		if request.user.is_authenticated:
 			client = Client.objects.get(id=request.user.id)

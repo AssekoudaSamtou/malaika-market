@@ -1,4 +1,15 @@
-<footer class="">
+<footer class="
+{% if request.path == acceuil_url %}
+	fixed-bottom
+{% elif request.path == about_url %}
+	fixed-bottom
+{% elif request.path == contact_url %}
+	fixed-bottom
+{% elif request.path == login_url %}
+	fixed-bottom
+{% elif request.path == logout_url %}
+	fixed-bottom
+{% endif %}" >
 	<div class="row">
 		<div class="col-lg-4 footer-left">
 			<ul>

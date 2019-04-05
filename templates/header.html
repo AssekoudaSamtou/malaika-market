@@ -28,6 +28,26 @@
 				<li class="nav-item {% if request.path == contact_url %}active{% endif %}">
 					<a class="nav-link" href="{% url 'contact' %}">Contact</a>
 				</li>
+
+				<li class="nav-item">
+
+					<a class="nav-link" href="{% url 'cart' %}">
+						<button class="btn btn-warning">
+							<i class="fa fa-shopping-cart" aria-hidden="true"></i> Mon Panier
+						</button>
+					</a>
+				</li>
+
+			</ul>
+
+			{% if request.path == "/produits" %}
+			<form class="form-inline my-2 my-lg-0">
+				<input id="mysearch" class="form-control mr-sm-2" type="search" placeholder="Rechercher un article" aria-label="Search"><label class="fa fa-search"></label>
+				<!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+			</form>
+			{% endif %}
+
+			<ul class="navbar-nav">
 				{% if request.user.is_authenticated %}
 				<li class="nav-item {% if request.path == logout_url %}active{% endif %}">
 					<a class="nav-link" href="{% url 'logout' %}">Deconnection</a>
@@ -37,32 +57,8 @@
 					<a class="nav-link" href="{% url 'login' %}">Connection</a>
 				</li>
 				{% endif %}
-
-				<li class="nav-item">
-
-					<a class="nav-link" href="{% url 'cart' %}">
-						<button class="btn btn-warning">
-							<i class=" fa fa-shopping-cart" aria-hidden="true"></i> Mon Panier
-						</button>
-					</a>
-				</li>
-
-				<!-- <li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Dropdown
-					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="#">Action</a>
-						<a class="dropdown-item" href="#">Another action</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="#">Something else here</a>
-					</div>
-				</li> -->
 			</ul>
-			<form class="form-inline my-2 my-lg-0">
-				<input id="mysearch" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-			</form>
+			
 		</div>
 		<div id="message-ajout" class="success">
 			Votre produit a ete ajout a votre panier avec succes!!!

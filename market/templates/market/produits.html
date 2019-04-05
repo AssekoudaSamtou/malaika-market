@@ -6,12 +6,15 @@
 {% block style %}
 	<link rel="stylesheet" type="text/css" href="{% static 'css/produits.css' %}">
 	<style type="text/css">
-		bodynn{height: 100%;background: url({% static 'image/cart01.jpg' %}) no-repeat center center fixed; 
+		bodynn{height: 100%;background: url({% static 'image/test1.jpg' %}) no-repeat center center fixed; 
 			-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;/*overflow: hidden;*/}
 	</style>
 {% endblock %}
 
 {% block content %}
+<div id="ajax-loader">
+	
+</div>
 <div id="ajax-container">
 	<div class="container">
 		<div class="row" id="content">
@@ -75,7 +78,7 @@
 								continuer le shopping
 							</button>
 						</div>
-						<div class="col-lg-4 col-lg-offset-4">
+						<div class="col-lg-4 offset-2">
 							{% if in_cart|item:produit %}
 								<div class="check">
 									<i class="fa fa-check" aria-hidden="true"></i>
@@ -136,17 +139,34 @@
 			});
 		});
 
-		$(".contuniue-shopping").on("click", function () {
+		$(".contuniue-shopping, .close").on("click", function () {
 			$(".modal-fade").slideUp();
 			$("#detail").css("display", "none");
 		});
 
 		$("#mysearch").keyup(function () {
-			// console.log(this.value);
+			var loader = "<img src='{% static 'image/ajax-loader.gif' %}'>";
+			$('#ajax-container').css("display", "none");
+			$('#ajax-loader').css("display", "block");
+			$('#ajax-loader').html(loader);
 			$.get("produits?name=" + this.value, function (data) {
+				$('#ajax-container').css("display", "block");
+				$('#ajax-loader').css("display", "none");
 				$('#ajax-container').html(data);
 			});
-		})
+		});
+
+		$("#mysearch").on("click", function () {
+			$(this).css("width", "500px");
+		});
+
+		$(".fa-search").on("click", function () {
+			if ( $("#mysearch").css("width") == "500px" ) {
+				console.log($("#mysearch").css("width"));
+				$("#mysearch").css("width", "200px");
+			}
+		});
+
 	});
 </script>
 {% endblock %}

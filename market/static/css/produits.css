@@ -190,3 +190,17 @@ transition-delay:.2s;
 	background: gray;
 	opacity: 0.85;
 }
+#ajax-loader{
+	display: none;
+	width: 100px;
+	margin: auto;
+	margin-top: 40px;
+}
+.close{
+	width: 50px;
+    display: block;
+    font-size: 40px;
+}
+.close:hover{
+	background: red;
+}

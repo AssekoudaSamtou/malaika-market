@@ -25,6 +25,7 @@ footer{
 
 footer, header .navbar{
 	background: black !important;
+	/*height: 300px;*/
 }
 
 #btn-news{
@@ -43,4 +44,30 @@ footer, header .navbar{
 }
 .footer-left a{
 	text-align: left;
+}
+.active{
+	/*background: greenyellow;*/
+	/*border-radius: 25px;*/
+}
+.active a{
+	/*color: darkorange;*/
+}
+.nav-item{
+	height: 50%;
+	/*margin-top: 10px;*/
+	/*font-weight: bold;*/
+	font-size: 20px;
+}
+.fa-search{
+	display: inline-block;
+	background: white;
+	width: 38px;
+	height: 38px;
+	border-color: white !important;
+	cursor: pointer;
+}
+#mysearch{
+	margin-right: 0px !important;
+    border-color: white;
+    border-radius: 0;
 }
